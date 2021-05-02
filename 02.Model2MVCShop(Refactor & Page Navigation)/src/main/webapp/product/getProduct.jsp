@@ -1,11 +1,11 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
-<%@ page import="com.model2.mvc.service.product.vo.*" %>
+<%@ page import="com.model2.mvc.service.domain.*" %>
 
 <%
 	System.out.println("<<<<< getProduct.jsp 시작 >>>>>");
 
-	ProductVO vo = (ProductVO)request.getAttribute("productVO");
-	System.out.println("받은 productVO : " + vo);
+	Product vo = (Product)request.getAttribute("product");
+	System.out.println("받은 product : " + vo);
 
 	String menu = (String)request.getParameter("menu");
 	System.out.println("받은 menu : " + menu);
@@ -153,7 +153,7 @@
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-					<a href="/listProduct.do?menu=manage">확인</a>
+					<a href="/listSale.do?menu=manage">확인</a>
 				</td>	
 					
 				<% } %>

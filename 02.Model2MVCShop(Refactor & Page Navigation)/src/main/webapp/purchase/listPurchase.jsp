@@ -1,43 +1,30 @@
-<%@page import="com.model2.mvc.service.purchase.vo.PurchaseVO"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="com.model2.mvc.common.SearchVO"%>
-<%@page import="java.util.HashMap"%>
 <%@page contentType="text/html; charset=EUC-KR"%>
+
+<%@page import="java.util.List"%>
+
+<%@page import="com.model2.mvc.service.domain.*"%>
+<%@page import="com.model2.mvc.common.Search"%>
+<%@page import="com.model2.mvc.common.Page"%>
+<%@page import="com.model2.mvc.common.util.CommonUtil"%>
 
 <%
 	System.out.println("<<<<< listPurchase.jsp 시작 >>>>>");
 	
-	HashMap<String,Object> map = (HashMap<String,Object>)request.getAttribute("map");
-	System.out.println("받은 map : " + map);
+	List<Purchase> list = (List<Purchase>)request.getAttribute("list");
+	System.out.println("받은 list : " + list);
 	
-	SearchVO searchVO = (SearchVO)request.getAttribute("searchVO");
-	System.out.println("받은 searchVO : " + searchVO);
-
-	int total = 0;
-	ArrayList<PurchaseVO> list = null;
-	if(map != null){
-		total = (Integer)map.get("count");
-		list  = (ArrayList<PurchaseVO>)map.get("list");
+	Search search = (Search)request.getAttribute("search");
+	System.out.println("받은 search : " + search);
+	
+	Page resultPage = (Page)request.getAttribute("resultPage");
+	System.out.println("받은 resultPage : " + resultPage);
+	
+	//==> null 을 ""(nullString)으로 변경
+	String searchCondition = CommonUtil.null2str(search.getSearchCondition());
+	String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 		
-		System.out.println("total : " + total);
-		System.out.println("list : " + list);
-	}
-	
-	int currentPage = searchVO.getPage();
-	
-	int totalPage = 0;
-	
-	if(total > 0) {
-		
-		totalPage = total / searchVO.getPageUnit() ;
-		
-		if(total % searchVO.getPageUnit() > 0) {
-			totalPage += 1;
-		}
-	}
-	
-	System.out.println("currentPage : " + currentPage);
-	System.out.println("totalPage : " + totalPage);
+	System.out.println("searchCondition은? " + searchCondition);
+	System.out.println("searchKeyword는? " + searchKeyword);
 %>
 
 <html>
@@ -47,7 +34,8 @@
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
 <script type="text/javascript">
-	function fncGetUserList() {
+	function fncGetUserList(currentPage) {
+		document.getElementById("currentPage").value = currentPage;
 		document.detailForm.submit();
 	}
 </script>
@@ -76,7 +64,9 @@
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
 	<tr>
-		<td colspan="11">전체 <%=totalPage %> 건수, 현재 <%=currentPage %> 페이지</td>
+		<td colspan="11">
+			전체 <%= resultPage.getTotalCount() %> 건수, 현재 <%= resultPage.getCurrentPage() %> 페이지
+		</td>
 	</tr>
 	<tr>
 		<td class="ct_list_b" width="100">No</td>
@@ -94,16 +84,13 @@
 	<tr>
 		<td colspan="11" bgcolor="808285" height="1"></td>
 	</tr>
-	
 	<% 	
-		int no = list.size();
-		for (int i=0; i<list.size(); i++) {
-			PurchaseVO vo = (PurchaseVO)list.get(i);
+		for(int i=0; i<list.size(); i++) {
+			Purchase vo = list.get(i);
 	%>
-	
 	<tr class="ct_list_pop">
 		<td align="center">
-			<a href="/getPurchase.do?tranNo=<%= vo.getTranNo()%>"><%=no-- %></a>
+			<a href="/getPurchase.do?tranNo=<%= vo.getTranNo()%>"><%= i + 1 %></a>
 		</td>
 		<td></td>
 		<td align="left">
@@ -126,7 +113,8 @@
 		<td></td>
 		<td align="left">
 		<% if (vo.getTranCode().trim().equals("2")) { %>
-			<a href="/updateTranCode.do?tranNo=<%=vo.getTranNo()%>&tranCode=3&page=<%=currentPage%>">물건도착</a>
+			<a href="/updateTranCode.do?tranNo=<%=vo.getTranNo()%>&tranCode=3&page=<%= resultPage.getCurrentPage() %>">
+			   물건도착</a>
 		<% } %>
 		</td>
 	</tr>
@@ -140,11 +128,22 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
 	<tr>
 		<td align="center">
-		 
-		<% for(int i=1; i<=totalPage; i++){ %>	
-			<a href="/listPurchase.do?page=<%=i%>"><%=i%></a>
-		<% } %>
-		
+		 	<input type="hidden" id="currentPage" name="currentPage" value=""/>
+			<% if( resultPage.getCurrentPage() <= resultPage.getPageUnit() ){ %>
+					◀ 이전
+			<% }else{ %>
+					<a href="/listPurchase.do?page=<%=resultPage.getCurrentPage()-1%>">◀ 이전</a>
+			<% } %>
+			
+			<% for(int i=resultPage.getBeginUnitPage(); i<=resultPage.getEndUnitPage(); i++) { %>
+				<a href="/listPurchase.do?page=<%= i %>"><%= i %></a>
+			<% } %>
+			
+			<% if( resultPage.getEndUnitPage() >= resultPage.getMaxPage() ){ %>
+					이후 ▶
+			<% }else{ %>
+					<a href="/listPurchase.do?page=<%=resultPage.getEndUnitPage()+1%>">이후 ▶</a>
+			<% } %>
 		</td>
 	</tr>
 </table>

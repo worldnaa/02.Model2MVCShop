@@ -1,11 +1,11 @@
-<%@ page import="com.model2.mvc.service.purchase.vo.PurchaseVO"%>
+<%@ page import="com.model2.mvc.service.domain.*" %>
 <%@ page contentType="text/html; charset=EUC-KR" %>
 
 <%
 	System.out.println("<<<<< getPurchase.jsp 시작 >>>>>");
 	
-	PurchaseVO vo = (PurchaseVO)request.getAttribute("purchaseVO");
-	System.out.println("받은 purchaseVO : " + vo);
+	Purchase vo = (Purchase)request.getAttribute("purchase");
+	System.out.println("받은 purchase : " + vo);
 %>
 
 <html>

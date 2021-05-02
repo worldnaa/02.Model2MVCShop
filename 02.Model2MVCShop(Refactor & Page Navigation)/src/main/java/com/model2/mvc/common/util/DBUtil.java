@@ -9,7 +9,11 @@ public class DBUtil {
 	///Field
 	private final static String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
 	private final static String JDBC_URL = "jdbc:oracle:thin:scott/tiger@localhost:1521:xe";
-
+	
+	///Constructor
+	private DBUtil(){
+	}
+	
 	///Method
 	public static Connection getConnection() {
 		Connection conn = null;
@@ -23,5 +27,5 @@ public class DBUtil {
 		}
 		return conn;
 	}
-
+	
 }//end of class

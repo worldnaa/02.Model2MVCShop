@@ -1,32 +1,31 @@
-package com.model2.mvc.service.purchase.vo;
+package com.model2.mvc.service.domain;
 
 import java.sql.Date;
 
-import com.model2.mvc.service.product.vo.ProductVO;
-import com.model2.mvc.service.user.vo.UserVO;
+import com.model2.mvc.service.domain.Product;
+import com.model2.mvc.service.domain.User;
 
-
-public class PurchaseVO {
+public class Purchase {
 	
-	private UserVO buyer;          //구매자정보(구매자아이디)
+	private User buyer;            //구매자정보(구매자아이디)
 	private String divyAddr;       //구매자주소
 	private String divyDate;       //배송희망일자
 	private String divyRequest;    //구매요청사항
 	private Date orderDate;        //구매일자
 	private String paymentOption;  //구매방법
-	private ProductVO purchaseProd;//구매물품정보(상품번호)
+	private Product purchaseProd;  //구매물품정보(상품번호)
 	private String receiverName;   //구매자이름
 	private String receiverPhone;  //구매자연락처
 	private String tranCode;       //구매상태코드
 	private int tranNo;            //구매번호
 	
-	public PurchaseVO(){
+	public Purchase(){
 	}
 	
-	public UserVO getBuyer() {
+	public User getBuyer() {
 		return buyer;
 	}
-	public void setBuyer(UserVO buyer) {
+	public void setBuyer(User buyer) {
 		this.buyer = buyer;
 	}
 	public String getDivyAddr() {
@@ -59,10 +58,10 @@ public class PurchaseVO {
 	public void setPaymentOption(String paymentOption) {
 		this.paymentOption = paymentOption;
 	}
-	public ProductVO getPurchaseProd() {
+	public Product getPurchaseProd() {
 		return purchaseProd;
 	}
-	public void setPurchaseProd(ProductVO purchaseProd) {
+	public void setPurchaseProd(Product purchaseProd) {
 		this.purchaseProd = purchaseProd;
 	}
 	public String getReceiverName() {

@@ -1,10 +1,10 @@
-package com.model2.mvc.service.product.vo;
+package com.model2.mvc.service.domain;
 
 import java.sql.Date;
 
-
-public class ProductVO {
+public class Product {
 	
+	///Field
 	private String fileName;   //상품이미지
 	private String manuDate;   //제조일자
 	private int price;         //가격
@@ -14,9 +14,11 @@ public class ProductVO {
 	private Date regDate;      //등록일자
 	private String proTranCode; 
 	
-	public ProductVO(){
+	///Constructor
+	public Product(){
 	}
 	
+	///Method
 	public String getProTranCode() {
 		return proTranCode;
 	}
@@ -66,10 +68,11 @@ public class ProductVO {
 		this.regDate = regDate;
 	}
 
-	// Override
+	@Override
 	public String toString() {
-		return "ProductVO : [fileName]" + fileName
-				+ "[manuDate]" + manuDate+ "[price]" + price + "[prodDetail]" + prodDetail
-				+ "[prodName]" + prodName + "[prodNo]" + prodNo + "[proTranCode]" + proTranCode;
-	}	
-}
+		return "Product : [fileName=" + fileName + ", manuDate=" + manuDate + ", price=" + price + ", prodDetail="
+				+ prodDetail + ", prodName=" + prodName + ", prodNo=" + prodNo + ", regDate=" + regDate
+				+ ", proTranCode=" + proTranCode + "]";
+	}
+	
+}//end of class

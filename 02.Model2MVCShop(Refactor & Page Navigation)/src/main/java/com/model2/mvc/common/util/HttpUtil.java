@@ -9,9 +9,11 @@ public class HttpUtil {
 	///Field
 	
 	///Constructor
-		
+	
 	///Method
-	public static void forward(HttpServletRequest request, HttpServletResponse response, String path){
+	public static void forward	(	HttpServletRequest request , 
+														HttpServletResponse response, 
+														String path){
 		try{
 			RequestDispatcher dispatcher = request.getRequestDispatcher(path);
 			dispatcher.forward(request, response);
@@ -21,7 +23,7 @@ public class HttpUtil {
 		}
 	}
 	
-	public static void redirect(HttpServletResponse response, String path){
+	public static void redirect( HttpServletResponse response , String path ){
 		try{
 			response.sendRedirect(path);
 		}catch(Exception ex){

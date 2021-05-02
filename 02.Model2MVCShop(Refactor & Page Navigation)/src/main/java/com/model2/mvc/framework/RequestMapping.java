@@ -7,12 +7,16 @@ import java.util.Properties;
 
 public class RequestMapping {
 	
+	///Field
 	private static RequestMapping requestMapping;
 	private Map<String, Action> map;
 	private Properties properties;
 	
+	///Constructor
 	private RequestMapping(String resources) {
+		
 		map = new HashMap<String, Action>();
+		
 		InputStream in = null;
 		try{
 			in = getClass().getClassLoader().getResourceAsStream(resources);
@@ -23,11 +27,14 @@ public class RequestMapping {
 			throw new RuntimeException("actionmapping.properties 파일 로딩 실패 :"  + ex);
 		}finally{
 			if(in != null){
-				try{ in.close(); } catch(Exception ex){}
+				try{ 
+					in.close(); 
+				} catch(Exception ex){ }
 			}
 		}
-	}
+	} 
 	
+	///Method
 	public synchronized static RequestMapping getInstance(String resources){
 		if(requestMapping == null){
 			requestMapping = new RequestMapping(resources);
@@ -36,13 +43,17 @@ public class RequestMapping {
 	}
 	
 	public Action getAction(String path){
+		
 		Action action = map.get(path);
+		
 		if(action == null){
+			
 			String className = properties.getProperty(path);
 			System.out.println("prop : " + properties);
 			System.out.println("path : " + path);			
 			System.out.println("className : " + className);
 			className = className.trim();
+			
 			try{
 				Class c = Class.forName(className);
 				Object obj = c.newInstance();

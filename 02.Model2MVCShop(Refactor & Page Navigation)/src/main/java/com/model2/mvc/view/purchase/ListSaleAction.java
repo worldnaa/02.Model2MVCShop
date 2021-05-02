@@ -1,16 +1,15 @@
 package com.model2.mvc.view.purchase;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import com.model2.mvc.common.SearchVO;
+import com.model2.mvc.common.Page;
+import com.model2.mvc.common.Search;
 import com.model2.mvc.framework.Action;
 import com.model2.mvc.service.purchase.PurchaseService;
 import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
-import com.model2.mvc.service.user.vo.UserVO;
 
 public class ListSaleAction extends Action {//판매목록 요청(Admin화면)
 
@@ -18,48 +17,44 @@ public class ListSaleAction extends Action {//판매목록 요청(Admin화면)
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println("<<<<< ListSaleAction : execute() 시작 >>>>>");
 		
-		SearchVO searchVO = new SearchVO();
+		Search search = new Search();
 		
-		int page = 1; //처음 들어올 경우 page는 1
-		
-		//"page"의 value가 null이 아닐 경우(page를 눌러 들어올 경우) page에 현재 페이지 값 저장
-		if(request.getParameter("page") != null) {
-			page = Integer.parseInt(request.getParameter("page"));
-			System.out.println("if문 내 page는? " + page); 
+		int currentPage = 1;
+
+		if(request.getParameter("currentPage") != null) {
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+			System.out.println("currentPage : " + currentPage);
 		}
 		
-		//SearchVO의 page에 "page"의 값 저장(처음 들어올 경우 1 저장)
-		//SearchVO의 searchCondition에 "searchCondition"의 값 저장
-		//SearchVO의 searchKeyword에 "searchKeyword"의 값 저장
-		searchVO.setPage(page);
-		searchVO.setSearchCondition(request.getParameter("searchCondition"));
-		searchVO.setSearchKeyword(request.getParameter("searchKeyword"));
+		search.setCurrentPage(currentPage);
+		search.setSearchCondition(request.getParameter("searchCondition"));
+		search.setSearchKeyword(request.getParameter("searchKeyword"));
+
+		System.out.println("searchCondition : "+request.getParameter("searchCondition"));
+		System.out.println("searchKeyword : "+request.getParameter("searchKeyword"));
 		
-		//디버깅
-		System.out.println("page는? "+page);
-		System.out.println("searchCondition은? "+request.getParameter("searchCondition"));
-		System.out.println("searchKeyword는? "+request.getParameter("searchKeyword"));
+		//web.xml  meta-data 로 부터 상수 추출
+		int pageSize = Integer.parseInt(getServletContext().getInitParameter("pageSize"));		
+		int pageUnit = Integer.parseInt(getServletContext().getInitParameter("pageUnit"));		
+		search.setPageSize(pageSize);
+		System.out.println("search 셋팅완료 : " + search);
 		
-		//SearchVO의 pageUnit에 web.xml의 "pageSize" 값 3 셋팅
-		searchVO.setPageUnit(Integer.parseInt(getServletContext().getInitParameter("pageSize")));
-		System.out.println("pageUnit은? "+ getServletContext().getInitParameter("pageSize"));
-		
-		//getPurchaseList()를 통해 페이지에 보여줄 데이터를 DB에서 가져와 map에 저장
+		//Business logic 수행
 		PurchaseService purchaseService = new PurchaseServiceImpl();
-		HashMap<String, Object> map = purchaseService.getSaleList(searchVO);
+		Map<String, Object> map = purchaseService.getSaleList(search);
+		System.out.println("map 셋팅완료 : " + map);
 		
-		//menu에 "menu"의 value(manage 혹은 search)를 불러와 저장
-		String menu = request.getParameter("menu");
-		System.out.println("menu는? "+menu);//디버깅
+		Page resultPage = new Page(currentPage, ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println("resultPage 셋팅완료 : "+resultPage);
 		
-		//페이지 정보를 listPurchase.jsp에 넘겨주기 위해 Request Object Scope에 값 셋팅
-		request.setAttribute("searchVO", searchVO);
-		request.setAttribute("map", map);
-		request.setAttribute("menu", menu);
+		//Model 과 View 연결
+		request.setAttribute("search", search);
+		request.setAttribute("list", map.get("list"));
+		request.setAttribute("resultPage", resultPage);
 		
 		System.out.println("<<<<< ListSaleAction : execute() 종료 >>>>>");
 		
 		return "forward:/purchase/listSale.jsp";
 		
-	}//end of execute()	
-}//end of class
+	}	
+}

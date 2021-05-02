@@ -1,11 +1,11 @@
 <%@ page contentType="text/html; charset=EUC-KR"%>
-<%@ page import="com.model2.mvc.service.purchase.vo.PurchaseVO"%>
+<%@ page import="com.model2.mvc.service.domain.*" %>
 
 <%
 	System.out.println("<<<<< addPurchase.jsp 시작 >>>>>");
 	
-	PurchaseVO purchaseVO = (PurchaseVO)request.getAttribute("purchaseVO");
-	System.out.println("받은 purchaseVO : " + purchaseVO);
+	Purchase purchase = (Purchase)request.getAttribute("purchase");
+	System.out.println("받은 purchase : " + purchase);
 %>
 
 <html>
@@ -22,18 +22,18 @@
 <table border=1>
 	<tr>
 		<td>물품번호</td>
-		<td><%=purchaseVO.getPurchaseProd().getProdNo() %></td>
+		<td><%=purchase.getPurchaseProd().getProdNo() %></td>
 		<td></td>
 	</tr>
 	<tr>
 		<td>구매자아이디</td>
-		<td><%=purchaseVO.getBuyer().getUserId() %></td>
+		<td><%=purchase.getBuyer().getUserId() %></td>
 		<td></td>
 	</tr>
 	<tr>
 		<td>구매방법</td>
 		<td>
-			<% if(purchaseVO.getPaymentOption().trim().equals("1")) {%>
+			<% if(purchase.getPaymentOption().trim().equals("1")) {%>
 				현금구매
 			<% }else { %>
 				신용구매
@@ -43,27 +43,27 @@
 	</tr>
 	<tr>
 		<td>구매자이름</td>
-		<td><%=purchaseVO.getReceiverName() %></td>
+		<td><%=purchase.getReceiverName() %></td>
 		<td></td>
 	</tr>
 	<tr>
 		<td>구매자연락처</td>
-		<td><%=purchaseVO.getReceiverPhone() %></td>
+		<td><%=purchase.getReceiverPhone() %></td>
 		<td></td>
 	</tr>
 	<tr>
 		<td>구매자주소</td>
-		<td><%=purchaseVO.getDivyAddr() %></td>
+		<td><%=purchase.getDivyAddr() %></td>
 		<td></td>
 	</tr>
 		<tr>
 		<td>구매요청사항</td>
-		<td><%=purchaseVO.getDivyRequest() %></td>
+		<td><%=purchase.getDivyRequest() %></td>
 		<td></td>
 	</tr>
 	<tr>
 		<td>배송희망일자</td>
-		<td><%=purchaseVO.getDivyDate() %></td>
+		<td><%=purchase.getDivyDate() %></td>
 		<td></td>
 	</tr>
 </table>

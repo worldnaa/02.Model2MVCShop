@@ -9,39 +9,40 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.model2.mvc.common.util.HttpUtil;
 
-
 public class ActionServlet extends HttpServlet {
 	
-	private RequestMapping mapper;
-
+	///Field
+	private RequestMapping requestMapping;
+	
+	///Method
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		String resources=getServletConfig().getInitParameter("resources");
-		mapper=RequestMapping.getInstance(resources);
+		String resources = getServletConfig().getInitParameter("resources");
+		requestMapping = RequestMapping.getInstance(resources);
 	}
 
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) 
-																									throws ServletException, IOException {
+																						throws ServletException, IOException {
 		
 		String url = request.getRequestURI();
 		String contextPath = request.getContextPath();
-		String path = url.substring(contextPath.length());
-		System.out.println(path);
+		String reqeustPath = url.substring(contextPath.length());
+		System.out.println("\nActionServlet.service() RequestURI : "+reqeustPath);
 		
 		try{
-			Action action = mapper.getAction(path);
+			Action action = requestMapping.getAction(reqeustPath);
 			action.setServletContext(getServletContext());
 			
 			String resultPage = action.execute(request, response);
-			String result = resultPage.substring(resultPage.indexOf(":")+1);
+			String path = resultPage.substring(resultPage.indexOf(":")+1);
 			
-			if(resultPage.startsWith("forward:"))
-				HttpUtil.forward(request, response, result);
-			else
-				HttpUtil.redirect(response, result);
-			
+			if(resultPage.startsWith("forward:")){
+				HttpUtil.forward(request, response, path);
+			}else{
+				HttpUtil.redirect(response, path);
+			}
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}

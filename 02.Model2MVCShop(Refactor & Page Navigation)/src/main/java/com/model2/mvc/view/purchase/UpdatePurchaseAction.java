@@ -4,9 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.model2.mvc.framework.Action;
+import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.purchase.PurchaseService;
 import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
-import com.model2.mvc.service.purchase.vo.PurchaseVO;
 
 public class UpdatePurchaseAction extends Action {//구매정보 수정 요청
 
@@ -17,18 +17,18 @@ public class UpdatePurchaseAction extends Action {//구매정보 수정 요청
 		int tranNo = Integer.parseInt(request.getParameter("tranNo"));
 		System.out.println("받은 tranNo : " + tranNo);
 		
-		PurchaseVO purchaseVO = new PurchaseVO();
-		purchaseVO.setTranNo(tranNo);
-		purchaseVO.setPaymentOption(request.getParameter("paymentOption"));
-		purchaseVO.setReceiverName(request.getParameter("receiverName"));
-		purchaseVO.setReceiverPhone(request.getParameter("receiverPhone"));
-		purchaseVO.setDivyAddr(request.getParameter("receiverAddr"));
-		purchaseVO.setDivyRequest(request.getParameter("receiverRequest"));
-		purchaseVO.setDivyDate(request.getParameter("divyDate"));
-		System.out.println("purchaseVO 셋팅완료 : " + purchaseVO);
+		Purchase purchase = new Purchase();
+		purchase.setTranNo(tranNo);
+		purchase.setPaymentOption(request.getParameter("paymentOption"));
+		purchase.setReceiverName(request.getParameter("receiverName"));
+		purchase.setReceiverPhone(request.getParameter("receiverPhone"));
+		purchase.setDivyAddr(request.getParameter("receiverAddr"));
+		purchase.setDivyRequest(request.getParameter("receiverRequest"));
+		purchase.setDivyDate(request.getParameter("divyDate"));
+		System.out.println("purchase 셋팅완료 : " + purchase);
 		
 		PurchaseService purchaseService = new PurchaseServiceImpl();
-		purchaseService.updatePurcahse(purchaseVO);
+		purchaseService.updatePurcahse(purchase);
 			
 		System.out.println("<<<<< UpdatePurchaseAction : execute() 종료 >>>>>");
 		

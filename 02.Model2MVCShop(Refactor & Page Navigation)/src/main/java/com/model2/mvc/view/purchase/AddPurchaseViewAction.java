@@ -4,12 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.model2.mvc.framework.Action;
+import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.product.impl.ProductServiceImpl;
-import com.model2.mvc.service.product.vo.ProductVO;
-import com.model2.mvc.service.purchase.PurchaseService;
-import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
-import com.model2.mvc.service.purchase.vo.PurchaseVO;
 
 public class AddPurchaseViewAction extends Action {//구매를 위한 화면요청
 	
@@ -28,11 +25,13 @@ public class AddPurchaseViewAction extends Action {//구매를 위한 화면요청
 		
 		//ProductServiceImpl 인스턴스를 생성하여 상품정보를 가져오는 getProduct() 실행
 		ProductService productService = new ProductServiceImpl();
-		ProductVO productVO = productService.getProduct(prodNo);
+		Product product = productService.getProduct(prodNo);
 		
-		request.setAttribute("productVO", productVO);
+		request.setAttribute("product", product);
 		
 		System.out.println("<<<<< AddPurchaseViewAction : execute() 종료 >>>>>");
+		
 		return "forward:/purchase/addPurchaseView.jsp";
+		
 	}
 }

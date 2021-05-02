@@ -1,61 +1,56 @@
 package com.model2.mvc.service.user.impl;
 
-import java.util.HashMap;
+import java.util.Map;
 
-import com.model2.mvc.common.SearchVO;
+import com.model2.mvc.common.Search;
 import com.model2.mvc.service.user.UserService;
-import com.model2.mvc.service.user.dao.UserDAO;
-import com.model2.mvc.service.user.vo.UserVO;
+import com.model2.mvc.service.user.dao.UserDao;
+import com.model2.mvc.service.domain.User;
+
 
 public class UserServiceImpl implements UserService{
-	//Field
-	private UserDAO userDAO;
 	
-	//Constructor
+	///Field
+	private UserDao userDao;
+	
+	///Constructor
 	public UserServiceImpl() {
-		userDAO = new UserDAO();
+		userDao=new UserDao();
 	}
 
-	//Method
-	public void addUser(UserVO userVO) throws Exception {
-		System.out.println("<<<<< UserServiceImpl : addUser() 실행 >>>>>");
-		userDAO.insertUser(userVO);
+	///Method
+	public void addUser(User user) throws Exception {
+		userDao.insertUser(user);
 	}
 
-	public UserVO loginUser(UserVO userVO) throws Exception {
-		System.out.println("<<<<< UserServiceImpl : loginUser() 실행 >>>>>");
-		
-		UserVO dbUser = userDAO.findUser(userVO.getUserId());
-		
-		if(! dbUser.getPassword().equals(userVO.getPassword()))
-			throw new Exception("로그인에 실패했습니다.");
+	public User loginUser(User user) throws Exception {
+			User dbUser=userDao.findUser(user.getUserId());
+
+			if(! dbUser.getPassword().equals(user.getPassword())){
+				throw new Exception("로그인에 실패했습니다.");
+			}
 			
-		return dbUser;
+			return dbUser;
 	}
 
-	public UserVO getUser(String userId) throws Exception {
-		System.out.println("<<<<< UserServiceImpl : getUser() 실행 >>>>>");
-		return userDAO.findUser(userId);
+	public User getUser(String userId) throws Exception {
+		return userDao.findUser(userId);
 	}
 
-	public HashMap<String,Object> getUserList(SearchVO searchVO) throws Exception {
-		System.out.println("<<<<< UserServiceImpl : getUserList() 실행 >>>>>");
-		return userDAO.getUserList(searchVO);
+	public Map<String,Object> getUserList(Search search) throws Exception {
+		return userDao.getUserList(search);
 	}
 
-	public void updateUser(UserVO userVO) throws Exception {
-		System.out.println("<<<<< UserServiceImpl : updateUser() 실행 >>>>>");
-		userDAO.updateUser(userVO);
+	public void updateUser(User user) throws Exception {
+		userDao.updateUser(user);
 	}
 
 	public boolean checkDuplication(String userId) throws Exception {
-		System.out.println("<<<<< UserServiceImpl : checkDuplication() 실행 >>>>>");
-		
-		boolean result = true;
-		UserVO userVO = userDAO.findUser(userId);
-		if(userVO != null) {
-			result = false;
+		boolean result=true;
+		User user=userDao.findUser(userId);
+		if(user != null) {
+			result=false;
 		}
 		return result;
 	}
-}//end of class
+}
