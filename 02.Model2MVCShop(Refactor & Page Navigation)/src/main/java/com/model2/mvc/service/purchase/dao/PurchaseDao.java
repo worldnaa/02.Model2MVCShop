@@ -3,6 +3,7 @@ package com.model2.mvc.service.purchase.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -153,11 +154,8 @@ public class PurchaseDao {
 		System.out.println("받은 search : " + search);
 		System.out.println("받은 buyerId : " + buyerId);
 		
-		Connection con = DBUtil.getConnection();
-		
-//		String sql = "SELECT * FROM transaction WHERE buyer_id=?";
-		String sql = "SELECT * FROM transaction WHERE buyer_id = 'user12'";
-		
+		String sql = "SELECT * FROM transaction WHERE buyer_id='" + buyerId +"'";
+
 		//getTotalCount() 메소드 실행 (this. 생략가능)
 		int totalCount = this.getTotalCount(sql);
 		System.out.println("totalCount : " + totalCount);
@@ -166,9 +164,11 @@ public class PurchaseDao {
 		//makeCurrentPageSql() 메소드 실행 (this. 생략가능)
 		sql = this.makeCurrentPageSql(sql, search);
 		
-		PreparedStatement pStmt = con.prepareStatement(sql);
-//		pStmt.setString(1, buyerId);
-		ResultSet rs = pStmt.executeQuery();
+		Connection con = DBUtil.getConnection();
+		
+		Statement stmt = con.createStatement();
+		
+		ResultSet rs = stmt.executeQuery(sql);
 		System.out.println("sql 전송완료 : " + sql);
 		
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -187,18 +187,22 @@ public class PurchaseDao {
 			purchase.setBuyer(service.getUser(rs.getString("buyer_id")));
 				
 			list.add(purchase);
-			if (!rs.next()) {
-				break;
-			}
+			
+//			if (!rs.next()) {
+//				break;
+//			}
 			System.out.println("purchase 셋팅완료 : " + purchase);
 		}
+		map.put("totalCount", totalCount);
 		map.put("list", list);
+		System.out.println("map에 totalCount 추가 : " + map);
 		System.out.println("map에 list 추가 : " + map);
+		
 		System.out.println("list.size() : " + list.size()); 
 		System.out.println("map.size() : " + map.size());
 		
 		rs.close();
-		pStmt.close();
+		stmt.close();
 		con.close();
 		
 		System.out.println("<<<<< PurchaseDAO : getPurchaseList() 종료 >>>>>");
@@ -262,9 +266,10 @@ public class PurchaseDao {
 			}
 				
 			list.add(product);
-			if (!rs.next()) {
-				break;
-			}				
+			
+//			if (!rs.next()) {
+//				break;
+//			}				
 			System.out.println("product 셋팅완료 : " + product);
 		}
 		

@@ -140,9 +140,9 @@ public class ProductDao {
 			}
 				
 			list.add(product);
-			if (!rs.next()) {
-				break;
-			}
+//			if (!rs.next()) {
+//				break;
+//			}
 			System.out.println("product 셋팅완료 : " + product);	
 		}
 		

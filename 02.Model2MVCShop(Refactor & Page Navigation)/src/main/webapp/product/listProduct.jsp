@@ -2,7 +2,7 @@
 
 <%@page import="java.util.List"%>
 
-<%@page import="com.model2.mvc.service.domain.Product"%>
+<%@page import="com.model2.mvc.service.domain.*"%>
 <%@page import="com.model2.mvc.common.Search"%>
 <%@page import="com.model2.mvc.common.Page"%>
 <%@page import="com.model2.mvc.common.util.CommonUtil"%>
